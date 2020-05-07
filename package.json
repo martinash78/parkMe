@@ -1,18 +1,24 @@
 {
   "name": "express-js",
   "version": "1.0.0",
-  "description": "MG Parking App",
+  "description": "parkMe",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon dist/index.js",
+    "dev": "nodemon -q -w dist index.js",
+    "watchAnddDev": "tsc -w & nodemon -q -w dist dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Martin Ashcroft",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.3.9",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
+    "express-validator": "^6.4.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7"
   },
@@ -21,6 +27,7 @@
     "@types/mongoose": "^5.7.13",
     "@types/node": "^13.13.2",
     "nodemon": "^2.0.3",
-    "prettier": "2.0.2"
+    "prettier": "2.0.2",
+    "ts-node": "^8.9.1"
   }
 }
