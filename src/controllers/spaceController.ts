@@ -57,7 +57,7 @@ export let availableSpaces = (req: Request, res: Response) => {
 export let claimSpace = async (req: any, res: any) => {
   let id: ISpace["id"] = req.body.id;
   let userId: string = req.user.id;
-  await canClaimSpace(userId).then(
+  await canClaimSpace(userId, id).then(
     () => {
       isSpaceAvailable(id, userId).then(
         async (space: ISpace) => {
@@ -136,7 +136,7 @@ async function canOfferSpace(id: number, userId: string) {
   });
 }
 
-async function canClaimSpace(userId: string) {
+async function canClaimSpace(userId: string, spaceId: number) {
   return new Promise((resolve, reject) => {
     Space.findOne(
       { $or: [{ ownerId: userId }, { loaneeId: userId }] },
@@ -144,12 +144,15 @@ async function canClaimSpace(userId: string) {
         if (err) {
           return reject(err);
         } else {
+          if (space && space.id === spaceId && space.ownerId === userId) {
+            return resolve(true);
+          }
           if (space) {
             return reject(
               "You are already associcated with space ID " + space.id
             );
           } else {
-            resolve(true);
+            return resolve(true);
           }
         }
       }
