@@ -33,7 +33,7 @@ router.post(
 
 router.get("/me", auth, userController.me);
 router.get("/", auth, userController.allUsers);
-router.get("/users/:userId", auth, userController.getUser);
+router.get("/:userId", auth, userController.getUser);
 router.post("/", auth, userController.createUser);
 
 export default router;

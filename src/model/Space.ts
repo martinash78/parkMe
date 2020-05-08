@@ -5,7 +5,7 @@ export interface ISpace extends Document {
   status: string;
   ownerId: string;
   onLoan: boolean;
-  loaneeId: number;
+  loaneeId: string;
 }
 
 export const spaceSchema = new Schema({
@@ -13,7 +13,7 @@ export const spaceSchema = new Schema({
   ownerId: { type: String, required: true, unique: true },
   status: { type: String, required: true },
   onLoan: { type: Boolean, required: true },
-  loaneeId: { type: Number, required: false },
+  loaneeId: { type: String, required: false },
 });
 
 const Space = mongoose.model<ISpace>("Space", spaceSchema);

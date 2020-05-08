@@ -10,4 +10,12 @@ function sendError(res: any, response: String, statusCode: number) {
   res.status(statusCode).json(error).send().end();
 }
 
-export { sendSuccess, sendError };
+function sendUnauthorised(res: any) {
+  sendError(res, "User is not authorised", 400);
+}
+
+function isAdmin(req: any): boolean {
+  return req.user.isAdmin;
+}
+
+export { sendSuccess, sendError, isAdmin, sendUnauthorised };

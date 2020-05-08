@@ -5,23 +5,34 @@ import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator/check";
 import { sendSuccess } from "../helpers/response";
 import { sendError } from "../helpers/response";
+import { isAdmin } from "../helpers/response";
+import { sendUnauthorised } from "../helpers/response";
+import config from "../config";
 
 export let allUsers = (req: Request, res: Response) => {
-  User.find((err: any, users: any) => {
-    if (err) {
-      res.send("Error!");
-    } else {
-      res.send(users);
-    }
-  });
+  if (isAdmin(req)) {
+    User.find((err: any, users: any) => {
+      if (err) {
+        res.send("Error!");
+      } else {
+        res.send(users);
+      }
+    });
+  } else {
+    sendUnauthorised(res);
+  }
 };
 
-export let getUser = (req: Request, res: Response) => {
+export let getUser = (req: any, res: any) => {
   let id = req.params.userId;
-  User.findById(id, function (err: string, user: IUser) {
-    if (err) return sendError(res, "Cannot find User ID " + id, 400);
-    res.send(user);
-  });
+  if (isAdmin(req) || req.user.id === id) {
+    User.findById(id, function (err: string, user: IUser) {
+      if (err) return sendError(res, "Cannot find User ID " + id, 400);
+      res.send(user);
+    });
+  } else {
+    sendUnauthorised(res);
+  }
 };
 
 export let createUser = (req: Request, res: Response) => {
@@ -71,12 +82,13 @@ export let signUp = async (req: any, res: any) => {
     const payload = {
       user: {
         id: user.id,
+        isAdmin: user.isAdmin,
       },
     };
 
     jwt.sign(
       payload,
-      "randomString",
+      config.secret,
       {
         expiresIn: 10000,
       },
@@ -121,12 +133,13 @@ export let login = async (req: any, res: any) => {
     const payload = {
       user: {
         id: user.id,
+        isAdmin: user.isAdmin,
       },
     };
 
     jwt.sign(
       payload,
-      "secret",
+      config.secret,
       {
         expiresIn: 3600,
       },
