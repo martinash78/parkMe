@@ -1,5 +1,5 @@
 import express from "express";
-import { check } from "express-validator/check";
+import { check } from "express-validator";
 import auth from "../middleware/auth";
 import * as spaceController from "../controllers/spaceController";
 

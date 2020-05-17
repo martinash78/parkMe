@@ -9,7 +9,7 @@ import { sendUnauthorised } from "../helpers/response";
 export let allSpaces = (req: Request, res: Response) => {
   Space.find((err: any, spaces: [ISpace]) => {
     if (err) {
-      res.send("Error!");
+      sendError(res, err, 400);
     } else {
       sendSuccess(res, spaces, 200);
     }
@@ -46,9 +46,9 @@ export let availableSpaces = (req: Request, res: Response) => {
     { status: "available" },
     (err: any, spaces: [ISpace]) => {
       if (err) {
-        res.send(err);
+        sendError(res, err, 400);
       } else {
-        res.send(spaces);
+        sendSuccess(res, spaces, 200);
       }
     }
   );

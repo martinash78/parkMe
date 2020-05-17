@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import User, { IUser } from "../model/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { validationResult } from "express-validator/check";
+import { validationResult } from "express-validator";
 import { sendSuccess } from "../helpers/response";
 import { sendError } from "../helpers/response";
 import { isAdmin } from "../helpers/response";
 import { sendUnauthorised } from "../helpers/response";
-import config from "../config";
 
 export let allUsers = (req: Request, res: Response) => {
   if (isAdmin(req)) {
@@ -60,9 +59,7 @@ export let signUp = async (req: any, res: any) => {
       email,
     });
     if (user) {
-      return res.status(400).json({
-        msg: "User Already Exists",
-      });
+      sendError(res, "User Already Exists", 400);
     }
 
     user = new User({
@@ -88,20 +85,18 @@ export let signUp = async (req: any, res: any) => {
 
     jwt.sign(
       payload,
-      config.secret,
+      process.env.SECRET,
       {
-        expiresIn: 10000,
+        expiresIn: 3600,
       },
       (err, token) => {
         if (err) throw err;
-        res.status(200).json({
-          token,
-        });
+        sendSuccess(res, { token }, 200);
       }
     );
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("Error in Saving");
+    sendError(res, "Error in Saving", 500);
   }
 };
 
@@ -139,7 +134,7 @@ export let login = async (req: any, res: any) => {
 
     jwt.sign(
       payload,
-      config.secret,
+      process.env.SECRET,
       {
         expiresIn: 3600,
       },

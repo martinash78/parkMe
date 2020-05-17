@@ -1,3 +1,4 @@
 node_modules
 *workspace
 config.ts
+.env

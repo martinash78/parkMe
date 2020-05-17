@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { sendError } from "../helpers/response";
-import config from "../config";
 
 export default function (req: any, res: any, next: any) {
   const bearerHeader = req.headers["authorization"];
@@ -8,7 +7,7 @@ export default function (req: any, res: any, next: any) {
   const bearer = bearerHeader.split(" ");
   const token = bearer[1];
   try {
-    const decoded: any = jwt.verify(token, config.secret);
+    const decoded: any = jwt.verify(token, process.env.SECRET);
     req.user = decoded.user;
     next();
   } catch (e) {

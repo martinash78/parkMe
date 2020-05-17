@@ -12,3 +12,10 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+  swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/foo/parkme.v1.yaml
+    volumes: ["$PWD:/foo"]
+    ports:
+      - "8081:8080"
