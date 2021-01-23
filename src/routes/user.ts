@@ -1,12 +1,16 @@
 import express from "express";
 import { check } from "express-validator";
 import auth from "../middleware/auth";
+import isAdmin from "../middleware/isAdmin";
+import isAdminOrLoggedInUser from "../middleware/isAdminOrLoggedInUser";
+import validate from "../middleware/validate";
 import * as userController from "../controllers/userController";
 
 const router = express.Router();
 
 router.post(
-  "/signup",
+  "/",
+  [],
   [
     check("forename", "Please Enter a Forename").not().isEmpty(),
     check("surname", "Please Enter a Surname").not().isEmpty(),
@@ -17,7 +21,7 @@ router.post(
     }),
     check("department", "Please Enter a Department").not().isEmpty(),
   ],
-  userController.signUp
+  userController.createUser
 );
 
 router.post(
@@ -32,8 +36,7 @@ router.post(
 );
 
 router.get("/me", auth, userController.me);
-router.get("/", auth, userController.allUsers);
-router.get("/:userId", auth, userController.getUser);
-router.post("/", auth, userController.createUser);
+router.get("/", [auth, isAdmin], userController.allUsers);
+router.get("/:userId", [auth, isAdminOrLoggedInUser], userController.getUser);
 
 export default router;

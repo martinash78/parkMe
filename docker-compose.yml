@@ -1,17 +1,23 @@
 version: "2"
 services:
-  web:
-    build: .
+  parkme-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
       - ./:/usr/src/app
     depends_on:
       - mongo
+    environment:
+      - SECRET=${SECRET}
+
   mongo:
     image: mongo
     ports:
       - "27017:27017"
+
   swagger:
     image: swaggerapi/swagger-ui
     environment:
@@ -19,3 +25,15 @@ services:
     volumes: ["$PWD:/foo"]
     ports:
       - "8081:8080"
+    links:
+      - parkme-web
+
+#  react-app:
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    stdin_open: true
+#    ports:
+#      - "8082:8080"
+#    volumes:
+#      - ./frontend:/app

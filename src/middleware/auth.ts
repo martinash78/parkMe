@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { sendError } from "../helpers/response";
+import { sendError } from "../api/response";
 
 export default function (req: any, res: any, next: any) {
   const bearerHeader = req.headers["authorization"];

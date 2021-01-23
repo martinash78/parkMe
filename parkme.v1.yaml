@@ -1,4 +1,8 @@
 openapi: 3.0.0
+tags: 
+  - name: missguided
+  - name: user
+  - name: space
 info:
   title: ParkMe
   version: '1.0'
@@ -7,50 +11,91 @@ info:
     email: martin.ashcroft1978@gmail.com
   description: Manage car park spaces
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'http://parkme-web:8080'
 paths:
-  '/spaces/{spaceId}':
-    get:
-      summary: Get Space
-      tags: []
-      operationId: get-space
+  /spaces/offer:
+    put:
+      summary: Offer space as available
+      tags:
+        - space
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+              examples:
+                Success:
+                  value:
+                    _id: 3
+                    onLoan: false
+                    status: available
+                    ownerId: 5fa95e44c787a900280a8fd3
+                    __v: 0
+                    loaneeId: null
+        '400':
+          description: Not allowed
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Not allowed:
+                  value:
+                    code: 400
+                    error: You cannot offer this space
+                Not Found:
+                  value:
+                    code: 400
+                    error: Space ID x not found
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: Authentication Error
+      operationId: put-space
+      description: ''
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Space'
-              examples: {}
-        '201':
-          description: Created
-      description: Get a car park space
-    put:
-      summary: Put Space
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Space'
-      operationId: put-space
-      description: Update a car park space
-    parameters:
-      - schema:
-          type: number
-        name: spaceId
-        in: path
-        required: true
+              properties:
+                id:
+                  type: number
+              required:
+                - id
+    parameters: []
   /spaces:
     post:
-      summary: ''
+      summary: Create a car park space
       operationId: post-space
       responses:
         '200':
@@ -59,8 +104,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Space'
-      description: Create a car park space
-      tags: []
+              examples:
+                Success:
+                  value:
+                    id: 1
+                    status: available
+                    ownerId: string
+                    onLoan: true
+                    loaneeId: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: string
+      description: ''
+      tags:
+        - space
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: number
+                onLoan:
+                  type: boolean
+                status:
+                  type: string
+                ownerId:
+                  type: string
+                loanee:
+                  type: string
+              required:
+                - _id
+                - onLoan
+                - status
+                - ownerId
+            examples: {}
     parameters: []
   '/users/{userId}':
     parameters:
@@ -70,8 +183,9 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: Get a user
+      tags:
+        - user
       responses:
         '200':
           description: OK
@@ -79,99 +193,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      operationId: Get-user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-      description: Get User
-  /users:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-      operationId: get-users
-      description: |
-        Get All Users
-    post:
-      summary: Create User
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      tags: []
-      operationId: post-users
-      description: Create User
-  /spaces/available:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Space'
-      operationId: get-spaces-available
-      description: Get spaces that are available
-  /spaces/claim:
-    parameters: []
-    put:
-      summary: ''
-      operationId: post-spaces-claim-spaceId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Space'
-      description: Claim an available space
-      tags: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: number
-                userId:
-                  type: number
-  /users/signup:
-    post:
-      summary: ''
-      operationId: post-users-signup
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-              examples: {}
+              examples:
+                Success:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    forename: string
+                    surname: string
+                    department: string
+                    email: user@example.com
+                    createdAt: '2019-08-24T14:15:22Z'
+                    isAdmin: true
+                    password: string
+                    __v: 0
         '400':
           description: Bad Request
           content:
@@ -183,49 +216,425 @@ paths:
                     type: number
                   error:
                     type: string
-        '500':
-          description: Internal Server Error
+              examples:
+                Cannot Find User:
+                  value:
+                    code: 400
+                    error: Cannot find User ID 999
+      operationId: Get-user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: ''
+      description: Get User
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - user
+      responses:
+        '200':
+          description: Success
           content:
             application/json:
               schema:
+                type: array
+                description: ''
+                minItems: 1
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/User'
+              examples:
+                Success:
+                  value:
+                    - isAdmin: true
+                      createdAt: '2020-11-09T15:19:54.075Z'
+                      __V: 0
+                      _id: 5fa95e44c787a900280a8fd3
+                      email: martin.ashcroft1978@gmail.com
+                      password: $2a$10$ZXFphn6cDOlPnOToGu/L6.PsALabuJIfULgWZw3.xNdccURj6qrNy
+                      forename: Martin
+                      surname: Ashcroft
+                      department: I.T.
+                      __v: 0
+                    - isAdmin: false
+                      createdAt: '2020-11-09T17:25:46.845Z'
+                      __V: 0
+                      _id: 5fa97df15787cd006719d794
+                      email: 990037@gmail.com
+                      password: $2a$10$CEYC1s85qCpWhr.Z/t/Ia.1TXTtyAPTm7VQ9zU9rmRXE0pUE2i6xu
+                      forename: Martin
+                      surname: Ashcroft
+                      department: I.T.
+                      __v: 0
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
                 type: object
                 properties:
                   code:
                     type: number
                   error:
                     type: string
-      description: User Sign Up
-      tags: []
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthourised:
+                  value:
+                    code: 401
+                    error: Authentication Error
+      operationId: get-users
+      description: ''
+      parameters: []
+    post:
+      summary: Create a user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Success:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    forename: string
+                    surname: string
+                    department: string
+                    email: user@example.com
+                    createdAt: '2019-08-24T14:15:22Z'
+                    isAdmin: true
+                    password: string
+                    __v: 0
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      properties: {}
+                required:
+                  - errors
+              examples:
+                Error:
+                  value:
+                    errors:
+                      - {}
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: string
+      tags:
+        - user
+      operationId: post-users
+      description: Create User
+      parameters: []
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
+            schema:
+              description: ''
+              type: object
+              properties:
+                forename:
+                  type: string
+                  minLength: 1
+                surname:
+                  type: string
+                  minLength: 1
+                department:
+                  type: string
+                  minLength: 1
+                email:
+                  type: string
+                  minLength: 1
+                isAdmin:
+                  type: boolean
+                password:
+                  type: string
+                  minLength: 1
+                username:
+                  type: string
+        description: Request body
+  /spaces/available:
+    get:
+      summary: Get available spaces
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ''
+                minItems: 1
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/Space'
+              examples:
+                Success:
+                  value:
+                    - _id: 2
+                      onLoan: false
+                      status: available
+                      ownerId: 5eb51867888e9b027a97d80f
+                      __v: 0
+                    - _id: 3
+                      onLoan: false
+                      status: available
+                      ownerId: 5fa95e44c787a900280a8fd3
+                      __v: 0
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: Authentication Error
+      operationId: get-spaces-available
+      description: Get spaces that are available
+      tags:
+        - space
+  /spaces/claim:
+    parameters: []
+    put:
+      summary: Claim an available space
+      operationId: post-spaces-claim-spaceId
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Already associcated:
+                  value:
+                    code: 400
+                    error: You are already associcated with space ID x
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: Authentication Error
+      description: Claim an available space
+      tags:
+        - space
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
-                username:
-                  type: string
+                id:
+                  type: number
+                userId:
+                  type: number
+  /users/login:
+    post:
+      summary: Login
+      operationId: Login
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  token:
+                    type: string
+                    minLength: 1
+              examples:
+                Success:
+                  value:
+                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWZhOTVlNDRjNzg3YTkwMDI4MGE4ZmQzIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE2MDQ5MzUyNjMsImV4cCI6MTYwNDkzODg2M30.lmXuG-KT1MTQU_lRo_KAzWjb3POuxySY9a8pfJD2Nqs
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+              examples:
+                Incorrect password:
+                  value:
+                    message: Incorrect Password!
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthourised:
+                  value:
+                    code: 401
+                    error: string
+      description: User Login
+      tags:
+        - user
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
                 email:
                   type: string
                 password:
                   type: string
-                forename:
-                  type: string
-                surname:
-                  type: string
-                department:
-                  type: string
             examples:
-              example-1: {}
+              success:
+                value:
+                  email: string
+                  password: string
+          application/json:
+            schema:
+              type: object
+              properties: {}
         description: ''
-  /users/login:
-    post:
-      summary: ''
-      operationId: Login
+  /users/me:
+    get:
+      summary: Get the logged in user
+      tags:
+        - user
       responses:
         '200':
           description: OK
-      description: User Login
-      tags: []
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Success:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    forename: string
+                    surname: string
+                    department: string
+                    email: user@example.com
+                    createdAt: '2019-08-24T14:15:22Z'
+                    isAdmin: true
+                    password: string
+                    __v: 0
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  code:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                required:
+                  - code
+                  - error
+              examples:
+                Unauthorised:
+                  value:
+                    code: 401
+                    error: string
+      operationId: get-users-me
+      description: Get user details for logged in user
 components:
   schemas:
     Space:
@@ -240,10 +649,6 @@ components:
           type: integer
           format: int32
           minimum: 1
-        number:
-          type: integer
-          format: int32
-          minimum: 1
         status:
           type: string
           enum:
@@ -251,16 +656,26 @@ components:
             - unavailable
             - on loan
         ownerId:
-          type: integer
           format: int64
-          minimum: 1
+          type: string
         onLoan:
           type: boolean
-        loanee:
-          type: number
+        loaneeId:
+          type: string
     User:
       title: user
       type: object
+      x-examples:
+        example-1:
+          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          forename: string
+          surname: string
+          department: string
+          email: user@example.com
+          createdAt: '2019-08-24T14:15:22Z'
+          isAdmin: true
+          password: string
+      description: system users
       properties:
         id:
           type: string
@@ -279,4 +694,14 @@ components:
           format: date-time
         isAdmin:
           type: boolean
-tags: []
+        password:
+          type: string
+        __v:
+          type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
