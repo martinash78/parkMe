@@ -1,12 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
-export interface ISpace extends Document {
-  _id: number;
-  status: string;
-  ownerId: string;
-  onLoan: boolean;
-  loaneeId: string;
-}
+import { ISpace } from "../interface/ISpace";
 
 export const spaceSchema = new Schema({
   _id: { type: Number, required: true },

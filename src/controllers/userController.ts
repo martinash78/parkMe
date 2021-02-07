@@ -10,7 +10,7 @@ export let createUser = async (req: any, res: any): Promise<void> => {
     const newUser = await userService.createUser(req.body);
     return sendSuccess(res, newUser, 200);
   } catch (error) {
-    sendError(res, error, 400);
+    sendError(res, error.message, 400);
   }
 };
 

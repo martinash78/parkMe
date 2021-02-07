@@ -3,7 +3,6 @@ import { check } from "express-validator";
 import auth from "../middleware/auth";
 import isAdmin from "../middleware/isAdmin";
 import isAdminOrLoggedInUser from "../middleware/isAdminOrLoggedInUser";
-import validate from "../middleware/validate";
 import * as userController from "../controllers/userController";
 
 const router = express.Router();
