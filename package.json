@@ -21,7 +21,7 @@
     "express-validator": "^6.7.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
-    "mongoose": "^5.10.16"
+    "mongoose": "^5.11.15"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
