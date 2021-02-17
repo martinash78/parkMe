@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Component, Fragment } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "../services/auth.service";
 import Login from "./login";
 import Profile from "./profile";
@@ -16,6 +15,8 @@ interface AppState {
     password?: string;
     loggedIn?: boolean;
   };
+  hasLoginError?: boolean;
+  loginErrorMessage?: string;
 }
 
 export class App extends Component<{}, AppState> {
@@ -31,12 +32,13 @@ export class App extends Component<{}, AppState> {
         password: "",
         loggedIn: !!AuthService.getCurrentUser(),
       },
+      hasLoginError: false,
     };
   }
 
   logOut() {
     AuthService.logout();
-    this.setState((prevState) => ({
+    this.setState(() => ({
       currentUser: {
         loggedIn: false,
       },
@@ -74,14 +76,20 @@ export class App extends Component<{}, AppState> {
             password: prevState.currentUser.password,
             loggedIn: true,
           },
+          hasLoginError: false,
+          loginErrorMessage: "",
         }));
       },
       (error) => {
-        this.setState({
+        this.setState((prevState) => ({
           currentUser: {
-            loggedIn: true,
+            username: prevState.currentUser.username,
+            password: prevState.currentUser.password,
+            loggedIn: false,
           },
-        });
+          hasLoginError: true,
+          loginErrorMessage: error.message,
+        }));
       }
     );
   };
@@ -110,6 +118,8 @@ export class App extends Component<{}, AppState> {
             handleLogin={this.handleLogin}
             onChangeUsername={this.onChangeUsername}
             onChangePassword={this.onChangePassword}
+            hasError={this.state.hasLoginError}
+            errorMessage={this.state.loginErrorMessage}
           />
         )}
       </Fragment>

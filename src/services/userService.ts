@@ -82,9 +82,12 @@ export default class UserService {
   };
 
   public getUser = async (userId: string): Promise<IUser> => {
-    return User.findById(userId, function (err: string, user: IUser) {
-      if (err) throw Error("Cannot find User ID " + userId);
-      return user;
-    });
+    return User.findById(userId)
+      .then((user) => {
+        return user;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   };
 }

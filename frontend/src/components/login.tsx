@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import Alert from "@material-ui/lab/Alert";
 
 interface FormDetails {
   username: string;
@@ -16,6 +17,8 @@ interface LoginProps {
   handleLogin: (e: any) => void;
   onChangeUsername: (e: any) => void;
   onChangePassword: (e: any) => void;
+  hasError?: boolean;
+  errorMessage?: string;
 }
 
 export default class Login extends Component<LoginProps, FormDetails> {
@@ -51,6 +54,13 @@ export default class Login extends Component<LoginProps, FormDetails> {
               autoComplete="current-password"
               onChange={this.props.onChangePassword}
             />
+
+            {this.props.hasError ? (
+              <Alert severity="error">{this.props.errorMessage}</Alert>
+            ) : (
+              ""
+            )}
+
             <Button type="submit" fullWidth variant="contained" color="primary">
               Sign In
             </Button>

@@ -1,0 +1,11 @@
+{
+    "isAdmin":true,
+    "createdAt":{"$date":"2021-01-23T13:35:32.082Z"},
+    "__V":0,
+    "email":"admin@admin.com",
+    "password":"$2a$10$7dUTQMDwJw75FwroBpfdsu9P8/pnlggQso/0yQhs.SbB4kcIpUhCO",
+    "forename":"Admin",
+    "surname":"User",
+    "department":"I.T.",
+    "__v":0
+}

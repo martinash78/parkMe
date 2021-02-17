@@ -11,7 +11,7 @@ info:
     email: martin.ashcroft1978@gmail.com
   description: Manage car park spaces
 servers:
-  - url: 'http://parkme-web:8080'
+  - url: 'http://localhost:8081'
 paths:
   /spaces/offer:
     put:

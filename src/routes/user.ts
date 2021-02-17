@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/",
-  [],
+  [auth, isAdmin],
   [
     check("forename", "Please Enter a Forename").not().isEmpty(),
     check("surname", "Please Enter a Surname").not().isEmpty(),

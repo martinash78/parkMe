@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   entry: "./src/components/index.tsx",
   target: "web",
@@ -11,6 +10,9 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+  },
+  watchOptions: {
+    poll: true,
   },
   module: {
     rules: [
@@ -32,9 +34,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src", "index.html"),
-    }),
-    new MiniCssExtractPlugin({
-      filename: "./src/yourfile.css",
     }),
   ],
 };

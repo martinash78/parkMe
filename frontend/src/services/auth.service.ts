@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/users/";
+const API_URL = "http://localhost:8081/users/";
 
 class AuthService {
   login(email: string, password: string) {
@@ -15,6 +15,9 @@ class AuthService {
         }
 
         return response.data;
+      })
+      .catch((errorMessage) => {
+        throw new Error(errorMessage.response.data.error);
       });
   }
 
