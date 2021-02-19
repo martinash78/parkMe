@@ -5,23 +5,10 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Alert from "@material-ui/lab/Alert";
+import { FormDetails } from "../interface/FormDetails";
+import { LoginProperties } from "../interface/LoginProperties";
 
-interface FormDetails {
-  username: string;
-  password: string;
-  loading: boolean;
-  message: string;
-}
-
-interface LoginProps {
-  handleLogin: (e: any) => void;
-  onChangeUsername: (e: any) => void;
-  onChangePassword: (e: any) => void;
-  hasError?: boolean;
-  errorMessage?: string;
-}
-
-export default class Login extends Component<LoginProps, FormDetails> {
+export default class Login extends Component<LoginProperties, FormDetails> {
   render() {
     return (
       <div>

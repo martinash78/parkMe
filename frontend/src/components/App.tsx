@@ -8,16 +8,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-
-interface AppState {
-  currentUser: {
-    username?: string;
-    password?: string;
-    loggedIn?: boolean;
-  };
-  hasLoginError?: boolean;
-  loginErrorMessage?: string;
-}
+import { AppState } from "../interface/AppState";
 
 export class App extends Component<{}, AppState> {
   constructor(props: {}) {
@@ -45,7 +36,7 @@ export class App extends Component<{}, AppState> {
     }));
   }
 
-  onChangeUsername(e: any) {
+  onChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState((prevState) => ({
       currentUser: {
         username: e.target.value,
@@ -54,7 +45,7 @@ export class App extends Component<{}, AppState> {
     }));
   }
 
-  onChangePassword(e: any) {
+  onChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState((prevState) => ({
       currentUser: {
         username: prevState.currentUser.username,
@@ -63,17 +54,17 @@ export class App extends Component<{}, AppState> {
     }));
   }
 
-  handleLogin = (e: any) => {
+  handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     AuthService.login(
       this.state.currentUser.username,
       this.state.currentUser.password
     ).then(
       () => {
-        this.setState((prevState) => ({
+        this.setState(() => ({
           currentUser: {
-            username: prevState.currentUser.username,
-            password: prevState.currentUser.password,
+            username: "",
+            password: "",
             loggedIn: true,
           },
           hasLoginError: false,
@@ -95,7 +86,7 @@ export class App extends Component<{}, AppState> {
   };
 
   render() {
-    const isLoggedIn = this.state.currentUser.loggedIn;
+    const isLoggedIn: boolean = this.state.currentUser.loggedIn;
     return (
       <Fragment>
         <AppBar position="static">
@@ -126,5 +117,3 @@ export class App extends Component<{}, AppState> {
     );
   }
 }
-
-export default App;
