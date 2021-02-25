@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import auth from "../middleware/auth";
 import isAdmin from "../middleware/isAdmin";
 import isAdminOrLoggedInUser from "../middleware/isAdminOrLoggedInUser";
-import * as userController from "../controllers/userController";
+import { UserController } from "../controllers/userController";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post(
     }),
     check("department", "Please Enter a Department").not().isEmpty(),
   ],
-  userController.createUser
+  UserController.createUser
 );
 
 router.post(
@@ -31,11 +31,11 @@ router.post(
       min: 6,
     }),
   ],
-  userController.login
+  UserController.login
 );
 
-router.get("/me", auth, userController.me);
-router.get("/", [auth, isAdmin], userController.allUsers);
-router.get("/:userId", [auth, isAdminOrLoggedInUser], userController.getUser);
+router.get("/me", auth, UserController.me);
+router.get("/", [auth, isAdmin], UserController.allUsers);
+router.get("/:userId", [auth, isAdminOrLoggedInUser], UserController.getUser);
 
 export default router;

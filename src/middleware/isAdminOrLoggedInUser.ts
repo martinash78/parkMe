@@ -1,4 +1,4 @@
-import { sendError } from "../api/response";
+import { sendError } from "../api/sendError";
 
 export default function (req: any, res: any, next: any) {
   let userId = req.params.userId;

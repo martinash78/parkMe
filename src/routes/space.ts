@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import auth from "../middleware/auth";
 import isAdmin from "../middleware/isAdmin";
 import validate from "../middleware/validate";
-import * as spaceController from "../controllers/spaceController";
+import { SpaceController } from "../controllers/spaceController";
 
 const router = express.Router();
 router.post(
@@ -15,11 +15,11 @@ router.post(
     check("loaneeId", "Please Enter a loaneeId").not().isEmpty(),
     check("ownerId", "Please Enter an ownerId").not().isEmpty(),
   ],
-  spaceController.createSpace
+  SpaceController.createSpace
 );
-router.get("/", auth, spaceController.allSpaces);
-router.get("/available", auth, spaceController.availableSpaces);
-router.put("/claim", auth, spaceController.claimSpace);
-router.put("/offer", auth, spaceController.offerSpace);
+router.get("/", auth, SpaceController.allSpaces);
+router.get("/available", auth, SpaceController.availableSpaces);
+router.put("/claim", auth, SpaceController.claimSpace);
+router.put("/offer", auth, SpaceController.offerSpace);
 
 export default router;

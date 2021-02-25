@@ -1,10 +1,11 @@
 import User from "../model/User";
 import { IUser } from "../interface/IUser";
+import { ITokenResponse } from "../interface/ITokenResponse";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export default class UserService {
-  public allUsers = async (): Promise<IUser[]> => {
+export const UserService = {
+  async allUsers(): Promise<IUser[]> {
     return User.find((err: any, users: IUser[]) => {
       if (err) {
         throw Error("Error");
@@ -12,9 +13,8 @@ export default class UserService {
         return users;
       }
     });
-  };
-
-  public createUser = async (userData: IUser): Promise<IUser> => {
+  },
+  async createUser(userData: IUser): Promise<IUser> {
     const {
       email,
       password,
@@ -45,9 +45,8 @@ export default class UserService {
     newUser.password = await bcrypt.hash(password, salt);
 
     return await newUser.save();
-  };
-
-  public login = async (email: string, password: string): Promise<string> => {
+  },
+  async login(email: string, password: string): Promise<ITokenResponse> {
     let user: IUser = await User.findOne({
       email,
     });
@@ -68,20 +67,20 @@ export default class UserService {
       },
     };
 
-    return jwt.sign(payload, process.env.SECRET, {
+    const token: string = jwt.sign(payload, process.env.SECRET, {
       expiresIn: 3600,
     });
-  };
 
-  public me = async (userId: string): Promise<IUser> => {
+    return { token: token };
+  },
+  async me(userId: string): Promise<IUser> {
     try {
       return await User.findById(userId);
     } catch (Error) {
       throw Error(Error.message);
     }
-  };
-
-  public getUser = async (userId: string): Promise<IUser> => {
+  },
+  async getUser(userId: string): Promise<IUser> {
     return User.findById(userId)
       .then((user) => {
         return user;
@@ -89,5 +88,5 @@ export default class UserService {
       .catch((error) => {
         throw new Error(error);
       });
-  };
-}
+  },
+};

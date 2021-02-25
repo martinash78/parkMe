@@ -3,18 +3,18 @@ import { ISpace } from "../interface/ISpace";
 import User from "../model/User";
 import { IUser } from "../interface/IUser";
 
-export default class SpaceService {
-  public all = async (): Promise<ISpace[]> => {
+export const SpaceService = {
+  async all(): Promise<ISpace[]> {
     return Space.find()
       .then((spaces: [ISpace]) => {
         return spaces;
       })
       .catch((error) => {
-        return error;
+        throw new Error(error.message);
       });
-  };
+  },
 
-  public createSpace = async (spaceData: ISpace): Promise<ISpace> => {
+  async createSpace(spaceData: ISpace): Promise<ISpace> {
     let ownerId = spaceData.ownerId;
 
     let user = await User.findById(ownerId)
@@ -33,19 +33,16 @@ export default class SpaceService {
     } else {
       throw Error("User Not Found");
     }
-  };
+  },
 
-  public available = async (): Promise<ISpace[]> => {
+  async available(): Promise<ISpace[]> {
     return Space.find({ status: "available" });
-  };
+  },
 
-  public claim = async (
-    spaceId: ISpace["id"],
-    userId: IUser["id"]
-  ): Promise<ISpace> => {
+  async claim(spaceId: ISpace["id"], userId: IUser["id"]): Promise<ISpace> {
     return this.canClaimSpace(userId, spaceId)
       .then(() => this.getAvailableSpace(spaceId, userId))
-      .then(async (space) => {
+      .then(async (space: ISpace) => {
         space.status = "unavailable";
         if (space.ownerId !== userId) {
           space.onLoan = true;
@@ -61,12 +58,9 @@ export default class SpaceService {
       .catch((error: Error) => {
         throw new Error(error.message);
       });
-  };
+  },
 
-  public offer = async (
-    spaceId: ISpace["id"],
-    userId: IUser["id"]
-  ): Promise<ISpace> => {
+  async offer(spaceId: ISpace["id"], userId: IUser["id"]): Promise<ISpace> {
     return Space.findById(spaceId)
       .then(async (space) => {
         if (!space) {
@@ -90,12 +84,12 @@ export default class SpaceService {
       .catch((error: Error) => {
         throw new Error(error.message);
       });
-  };
+  },
 
-  private canClaimSpace = async (
+  async canClaimSpace(
     userId: IUser["id"],
     spaceId: ISpace["id"]
-  ): Promise<boolean> => {
+  ): Promise<boolean> {
     return Space.findOne({ $or: [{ ownerId: userId }, { loaneeId: userId }] })
       .then((space) => {
         if (space && space.id === spaceId && space.ownerId === userId) {
@@ -108,12 +102,9 @@ export default class SpaceService {
       .catch((error) => {
         throw Error(error);
       });
-  };
+  },
 
-  private getAvailableSpace = async (
-    id: number,
-    userId: string
-  ): Promise<ISpace> => {
+  async getAvailableSpace(id: number, userId: string): Promise<ISpace> {
     return Space.findById(id)
       .then((space) => {
         if (!space) {
@@ -127,5 +118,5 @@ export default class SpaceService {
       .catch((error) => {
         throw Error(error);
       });
-  };
-}
+  },
+};
