@@ -4,7 +4,7 @@ import { sendError } from "../api/sendError";
 import { UserService } from "../services/UserService";
 
 export const UserController = {
-  async createUser(req: any, res: any): Promise<void> {
+  async createUser(req: Request, res: Response): Promise<void> {
     UserService.createUser(req.body)
       .then((newUser) => {
         sendSuccess(res, newUser, 200);
@@ -22,9 +22,8 @@ export const UserController = {
         sendError(res, error.message, 400);
       });
   },
-  async login(req: any, res: any): Promise<void> {
+  async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
-
     UserService.login(email, password)
       .then((token) => {
         sendSuccess(res, token, 200);
@@ -33,7 +32,7 @@ export const UserController = {
         sendError(res, error.message, 400);
       });
   },
-  async me(req: any, res: any): Promise<void> {
+  async me(req: any, res: Response): Promise<void> {
     UserService.me(req.user.id)
       .then((user) => {
         sendSuccess(res, user, 200);
@@ -42,7 +41,7 @@ export const UserController = {
         sendError(res, error.message, 400);
       });
   },
-  async getUser(req: any, res: any): Promise<void> {
+  async getUser(req: Request, res: Response): Promise<void> {
     UserService.getUser(req.params.userId)
       .then((user) => {
         sendSuccess(res, user, 200);

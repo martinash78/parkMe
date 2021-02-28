@@ -33,7 +33,7 @@ export const SpaceController = {
         sendError(res, error.message, 400);
       });
   },
-  async claimSpace(req: any, res: any) {
+  async claimSpace(req: any, res: Response) {
     let spaceId: ISpace["id"] = req.body.id;
     let userId: IUser["id"] = req.user.id;
 
@@ -45,7 +45,7 @@ export const SpaceController = {
         sendError(res, error.message, 400);
       });
   },
-  async offerSpace(req: any, res: any) {
+  async offerSpace(req: any, res: Response) {
     let spaceId: ISpace["id"] = req.body.id;
     let userId: IUser["id"] = req.user.id;
 

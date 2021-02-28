@@ -11,12 +11,15 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-connectDb().then(() => {
-  app.use("/users", userRoutes);
-  app.use("/spaces", spaceRoutes);
-  function handleError(err: string) {
-    return err;
-  }
-});
+if (process.env.NODE_ENV !== "test") {
+  connectDb()
+    .then(() => {
+      app.use("/users", userRoutes);
+      app.use("/spaces", spaceRoutes);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 export = app;

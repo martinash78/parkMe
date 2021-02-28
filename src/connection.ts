@@ -1,8 +1,10 @@
 import { connect } from "mongoose";
 
-let mongoUri: string = "mongodb://mongo:27017/parkme";
+const dbName = process.env.NODE_ENV === "test" ? "parkMeTest" : "parkMe";
+const dbHost = process.env.NODE_ENV === "test" ? "localhost" : "mongo";
+const mongoUri: string = `mongodb://${dbHost}:27017/${dbName}`;
 
-const connectDb = async () => {
+const connectDb = async (): Promise<void> => {
   try {
     await connect(mongoUri, {
       useNewUrlParser: true,
@@ -10,8 +12,7 @@ const connectDb = async () => {
       useCreateIndex: true,
     });
   } catch (e) {
-    console.log(e);
-    throw e;
+    throw new Error(e);
   }
 };
 
