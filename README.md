@@ -1,11 +1,11 @@
 # parkMe
 
-###Env 
+### Env 
 
 Make sure to copy `.env.example` to `env` and add in the relevant values.
 
 
-###Database Seeding
+### Database Seeding
 
 Use the following command to initially seed the database, you will need mongoimport installed. You can find more info here https://docs.mongodb.com/database-tools/installation/installation/
 
@@ -15,7 +15,7 @@ This will give you a default admin user of `admin@admin.com` with the password `
 
 Admin users can create spaces and add new users.
 
-###Running
+### Running
 
 To run the app locally just run the following commands:
 
@@ -30,7 +30,7 @@ Mongo will load at localhost:27017. [Compass](https://www.mongodb.com/products/c
  
 Swagger UI will load at http://localhost:8082, all calls can be tested via this UI.
 
-###Tests
+### Tests
 
 You can run tests by running the following commands
 
