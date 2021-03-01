@@ -1,5 +1,8 @@
 # parkMe
 
+This purpose of this app is to allow owners of parking spaces to be able to offer their spaces as available so that
+other users of the app who do not have a reserved space can claim the space and use it as their own.
+
 ### Env 
 
 Make sure to copy `.env.example` to `env` and add in the relevant values.
@@ -39,4 +42,10 @@ You can run tests by running the following commands
 * npm run test - All tests
 * npm run test unit - All unit tests
 * npm run test int - All integration tests
+
+### Postman
+
+You can download a Postman collection here:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/5ed2635b046ae90d4cfd#?env%5BfreeSpace%5D=W3sia2V5IjoiYWRtaW5CZWFyZXJUb2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJyYW5kb21Vc2VyTmFtZSIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJ1cmwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MSIsImVuYWJsZWQiOnRydWV9XQ==)
 
