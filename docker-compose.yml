@@ -1,4 +1,7 @@
 version: "2"
+volumes:
+  api_node_modules:
+  app_node_modules:
 services:
   api:
     build:
@@ -8,6 +11,7 @@ services:
       - "8081:8080"
     volumes:
       - ./:/usr/src/app
+      - api_node_modules:/usr/src/app/node_modules
     depends_on:
       - mongo
     environment:
@@ -34,5 +38,6 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend:/usr/src/app
+      - app_node_modules:/usr/src/app/node_modules
     depends_on:
       - api
