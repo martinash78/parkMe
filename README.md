@@ -7,6 +7,8 @@ Make sure to copy `.env.example` to `env` and add in the relevant values.
 
 ### Database Seeding
 
+Install MongoDB using the guide here https://docs.mongodb.com/guides/server/install/
+
 Use the following command to initially seed the database, you will need mongoimport installed. You can find more info here https://docs.mongodb.com/database-tools/installation/installation/
 
 `mongoimport --db parkMe --collection users data/users/user.json`
