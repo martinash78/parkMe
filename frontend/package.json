@@ -37,7 +37,7 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-validation": "^3.0.7",
-    "validator": "^13.5.2",
+    "validator": "^13.7.0",
     "webpack": "^4.27.0"
   }
 }
